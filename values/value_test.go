@@ -26,14 +26,24 @@ func TestValue_Equal(t *testing.T) {
 }
 
 func TestValue_Func(t *testing.T) {
-	iv := ValueOf("empty")
-
+	iv := ValueOf("")
 	require.True(t, iv.Equal(ValueOf(func(val interface{}) bool {
-		return true
+		return IsEmpty(val)
 	})))
 
+	iv = ValueOf("content")
 	require.False(t, iv.Equal(ValueOf(func(val interface{}) bool {
-		return false
+		return IsEmpty(val)
+	})))
+
+	iv = ValueOf([]string{})
+	require.True(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
+	})))
+
+	iv = ValueOf([]string{"item"})
+	require.False(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
 	})))
 }
 
