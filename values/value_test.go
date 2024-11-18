@@ -3,7 +3,7 @@ package values
 import (
 	"testing"
 
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 
 	"github.com/stretchr/testify/require"
 )
@@ -23,6 +23,18 @@ func TestValue_Equal(t *testing.T) {
 	iv := ValueOf(123)
 	require.True(t, iv.Equal(ValueOf(123)))
 	require.True(t, iv.Equal(ValueOf(123.0)))
+}
+
+func TestValue_Func(t *testing.T) {
+	iv := ValueOf("empty")
+
+	require.True(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return true
+	})))
+
+	require.False(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return false
+	})))
 }
 
 func TestValue_Less(t *testing.T) {
