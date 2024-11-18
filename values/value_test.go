@@ -3,7 +3,7 @@ package values
 import (
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 
 	"github.com/stretchr/testify/require"
 )
