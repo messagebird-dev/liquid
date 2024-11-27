@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strconv"
 	"time"
 
 	"github.com/osteele/liquid/parser"
@@ -123,6 +124,21 @@ func writeObject(w io.Writer, value any) error {
 		return err
 		// there used be a case on fmt.Stringer here, but fmt.Sprint produces better results than obj.Write
 		// for instances of error and *string
+	case float64:
+		strVal := strconv.FormatFloat(value, 'f', -1, 64)
+
+		// very debatable whether we should add the .0.
+		// If we don't, {{ 123.00 }} will render as "123"
+		// but in official liquid it's "123.0"
+		// not doing it for now. Might change it later.
+		// if !strings.Contains(strVal, ".") {
+		// 	strVal = strVal + ".0"
+		// }
+		_, err := io.WriteString(w, strVal)
+		return err
+	case float32:
+		_, err := io.WriteString(w, strconv.FormatFloat(float64(value), 'f', -1, 64))
+		return err
 	}
 	rt := reflect.ValueOf(value)
 	switch rt.Kind() {
