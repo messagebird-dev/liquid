@@ -39,6 +39,7 @@ var cfTagTests = []struct{ in, expected string }{
 	{`{% if true %}0{% elsif true %}1{% else %}2{% endif %}`, "0"},
 	{`{% if false %}0{% elsif true %}1{% else %}2{% endif %}`, "1"},
 	{`{% if false %}0{% elsif false %}1{% else %}2{% endif %}`, "2"},
+	{`{% if 2456789.01 > 2456789 %}true{% endif %}`, "true"},
 
 	// unless
 	{`{% unless true %}false{% endunless %}`, ""},

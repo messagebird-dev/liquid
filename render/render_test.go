@@ -21,6 +21,9 @@ var renderTests = []struct{ in, out string }{
 	{`{{ false }}`, "false"},
 	{`{{ 12 }}`, "12"},
 	{`{{ 12.3 }}`, "12.3"},
+	{`{{ 2456789.01 }}`, "2456789.01"}, // Joe added - exists to ensure scientific notation is not used for big floats
+	// disabled because this just outputs 123 atm - see render/render.go:130.
+	// {`{{ 123.00 }}`, "123.0"},       // Joe added to test if we always output at least one dp for floats
 	{`{{ date }}`, "2015-07-17 15:04:05 +0000"},
 	{`{{ "string" }}`, "string"},
 	{`{{ array }}`, "firstsecondthird"},
