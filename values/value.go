@@ -95,7 +95,14 @@ func (v valueEmbed) Test() bool                { return true }
 // A wrapperValue wraps a Go value.
 type wrapperValue struct{ value any }
 
-func (v wrapperValue) Equal(other Value) bool    { return Equal(v.value, other.Interface()) }
+func (v wrapperValue) Equal(other Value) bool {
+	fn, ok := other.Interface().(func(v interface{}) bool)
+	if ok {
+		return fn(v.Interface())
+	}
+
+	return Equal(v.value, other.Interface())
+}
 func (v wrapperValue) Less(other Value) bool     { return Less(v.value, other.Interface()) }
 func (v wrapperValue) IndexValue(Value) Value    { return nilValue }
 func (v wrapperValue) Contains(Value) bool       { return false }

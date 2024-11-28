@@ -25,6 +25,28 @@ func TestValue_Equal(t *testing.T) {
 	require.True(t, iv.Equal(ValueOf(123.0)))
 }
 
+func TestValue_Func(t *testing.T) {
+	iv := ValueOf("")
+	require.True(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
+	})))
+
+	iv = ValueOf("content")
+	require.False(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
+	})))
+
+	iv = ValueOf([]string{})
+	require.True(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
+	})))
+
+	iv = ValueOf([]string{"item"})
+	require.False(t, iv.Equal(ValueOf(func(val interface{}) bool {
+		return IsEmpty(val)
+	})))
+}
+
 func TestValue_Less(t *testing.T) {
 	iv := ValueOf(123)
 	require.False(t, iv.Less(ValueOf(100)))
