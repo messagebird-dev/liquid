@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/osteele/liquid/values"
 	"github.com/osteele/tuesday"
@@ -154,11 +155,21 @@ func AddStandardFilters(fd FilterDictionary) { //nolint: gocyclo
 	fd.AddFilter("append", func(s, suffix string) string {
 		return s + suffix
 	})
+
 	fd.AddFilter("capitalize", func(s, suffix string) string {
 		if len(s) == 0 {
 			return s
 		}
-		return strings.ToUpper(s[:1]) + s[1:]
+
+		r, size := utf8.DecodeRuneInString(s)
+		switch {
+		case r == utf8.RuneError:
+			return s
+		case !unicode.IsLetter(r):
+			return s
+		}
+
+		return string(unicode.ToUpper(r)) + s[size:]
 	})
 	fd.AddFilter("downcase", func(s, suffix string) string {
 		return strings.ToLower(s)
