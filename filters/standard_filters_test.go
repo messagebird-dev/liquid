@@ -96,6 +96,7 @@ var filterTests = []struct {
 	{`"title" | capitalize`, "Title"},
 	{`"my great title" | capitalize`, "My great title"},
 	{`"" | capitalize`, ""},
+	{`"ওয়েস্টার্ন" | capitalize`, "ওয়েস্টার্ন"}, // outputs valid UTF-8
 	{`"Parker Moore" | downcase`, "parker moore"},
 	{`"Have you read 'James & the Giant Peach'?" | escape`, "Have you read &#39;James &amp; the Giant Peach&#39;?"},
 	{`"1 < 2 & 3" | escape_once`, "1 &lt; 2 &amp; 3"},
